@@ -3,29 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <title>濕地故事館 AI 諮詢系統</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+    .box {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 16px;
+      font-size: 16px;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 <body>
-  <h2>濕地故事館 AI 諮詢小幫手 🤖</h2>
-
-  <textarea id="question" rows="4" style="width:100%;" placeholder="請輸入問題"></textarea>
-  <br><br>
-  <button onclick="ask()">送出</button>
-
-  <div id="answer" style="margin-top:20px;white-space:pre-wrap;"></div>
+  <div class="box">
+    <h2>濕地故事館 AI 諮詢系統</h2>
+    <p>請輸入與新北市濕地故事館相關的問題：</p>
+    <input id="question" placeholder="例如：從板橋花市怎麼去濕地故事館？">
+    <button onclick="ask()">送出</button>
+    <pre id="answer"></pre>
+  </div>
 
   <script>
     async function ask() {
-      const q = document.getElementById("question").value;
+      const q = document.getElementById("question").value.trim();
       const a = document.getElementById("answer");
-      a.textContent = "請稍候…";
 
-      const res = await fetch("【https://script.google.com/macros/s/AKfycbxat1bQ5ZWnHN0wEganO8idKpdi5ZsGw5-hH0thNKKIuKMp8LJTP8PhSWclVSlcyC8Fuw/exec】", {
-        method: "POST",
-        body: JSON.stringify({ question: q })
-      });
+      if (!q) {
+        a.textContent = "請先輸入問題";
+        return;
+      }
 
-      const data = await res.json();
-      a.textContent = data.reply;
+      a.textContent = "思考中…";
+
+      const formData = new URLSearchParams();
+      formData.append("question", q);
+
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbxat1bQ5ZWnHN0wEganO8idKpdi5ZsGw5-hH0thNKKIuKMp8LJTP8PhSWclVSlcyC8Fuw/exec", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        a.textContent = data.reply;
+      } catch (e) {
+        a.textContent = "系統連線失敗，請稍後再試";
+      }
     }
   </script>
 </body>
