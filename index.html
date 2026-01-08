@@ -63,8 +63,9 @@
           body: formData
         });
 
-        const data = await res.json();
-        a.textContent = data.reply;
+       const text = await res.text();
+       a.textContent = text;
+
       } catch (e) {
         a.textContent = "系統連線失敗，請稍後再試";
       }
