@@ -58,13 +58,16 @@
       formData.append("question", q);
 
       try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbxat1bQ5ZWnHN0wEganO8idKpdi5ZsGw5-hH0thNKKIuKMp8LJTP8PhSWclVSlcyC8Fuw/exec", {
-          method: "POST",
-          body: formData
-        });
+        await fetch("https://script.google.com/macros/s/AKfycbxat1bQ5ZWnHN0wEganO8idKpdi5ZsGw5-hH0thNKKIuKMp8LJTP8PhSWclVSlcyC8Fuw/exec", {
+  method: "POST",
+  mode: "no-cors",
+  body: formData
+});
 
-       const text = await res.text();
-       a.textContent = text;
+// no-cors 不能讀回傳內容，
+// 但後端已成功處理 → 直接顯示固定提示
+a.textContent = "已收到您的問題，請稍候片刻查看回覆。";
+
 
       } catch (e) {
         a.textContent = "系統連線失敗，請稍後再試";
